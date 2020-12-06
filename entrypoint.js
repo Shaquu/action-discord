@@ -49,6 +49,8 @@ if (argv._.length === 0 && !process.env.DISCORD_EMBEDS) {
        process.exit(1);
      }
   }
+  
+  console.log('embedsObject: ', embedsObject);
 
   url = process.env.DISCORD_WEBHOOK;
   payload = JSON.stringify({
@@ -63,6 +65,7 @@ if (argv._.length === 0 && !process.env.DISCORD_EMBEDS) {
 
 (async () => {
   console.log('Sending message ...');
+  console.log(payload);
   await axios.post(
     `${url}?wait=true`,
     payload,
