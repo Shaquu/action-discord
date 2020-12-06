@@ -53,12 +53,18 @@ if (argv._.length === 0 && !process.env.DISCORD_EMBEDS) {
   console.log('embedsObject: ', embedsObject);
 
   url = process.env.DISCORD_WEBHOOK;
-  payload = JSON.stringify({
-    content: message,
-    ...process.env.DISCORD_EMBEDS && { embeds: embedsObject },
+  
+  const rawPayload = {
+    ...process.env.DISCORD_EMBEDS && { embeds: Array.isArray(embedsObject) ? embedsObject : [embedsObject] },
     ...process.env.DISCORD_USERNAME && { username: process.env.DISCORD_USERNAME },
     ...process.env.DISCORD_AVATAR && { avatar_url: process.env.DISCORD_AVATAR },
-  });
+  }
+  
+  if (message && message.trim().length > 0) {
+    rawPayload.content = message
+  }
+  
+  payload = JSON.stringify(rawPayload);
 }
 
 // curl -X POST -H "Content-Type: application/json" --data "$(cat $GITHUB_EVENT_PATH)" $DISCORD_WEBHOOK/github
